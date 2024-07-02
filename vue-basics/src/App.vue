@@ -1,8 +1,46 @@
 <script setup lang="ts">
-import Navbar from './components/Navbar.vue';
+import { computed } from "vue";
+import Navbar from "./components/Navbar.vue";
+import { useModal } from "./composables/modal";
+import { useUsers } from "./stores/users";
+
+const modal = useModal();
+const usersStore = useUsers();
+
+const modalStyle = computed(() => {
+  return {
+    display: modal.show.value ? 'block' : 'none'
+  }
+})
+
+// async function authenticate() {
+//   const res = await window.fetch("/api/current-user", {
+//     headers: {
+//       'Content-Type': 'application/json',
+//     }
+//   })
+//   console.log(await res.json());
+// }
+usersStore.authenticate();
 </script>
 
 <template>
+  <div 
+  class="modal" 
+  style="color: white;"
+  :style="modalStyle"
+  >
+    <div class="modal-background">
+      <div class="modal-content">
+        <div id="modal"></div>
+      </div>
+    </div>
+    <button 
+    class="modal-close is-large"
+    @click="modal.hideModal()"
+    ></button>
+  </div>
+
   <div class="section">
     <div class="container">
       <Navbar />
