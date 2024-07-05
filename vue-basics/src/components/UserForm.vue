@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import FormInput from "./FormInput.vue";
 import { validate, length, required } from "../validation";
 import { NewUser } from "../users"
 
-defineProps < {
+const props = defineProps < {
     error?: string;
+    showRequired?: boolean;
 }>()
-
 
 const emit = defineEmits < {
     (event: 'submit', payload: NewUser): void
@@ -15,23 +15,44 @@ const emit = defineEmits < {
 
 const username = ref('');
 
+let showErrors: boolean = false;
+
+watch(username, async (newval, oldval) => {
+    if (newval && !oldval) {
+        showErrors = true;
+    } else {
+        showErrors = false;
+    }
+
+})
+
+
+
 const usernameStatus = computed(() => {
-    return validate(username.value, [required, length({ min: 5, max: 10 })])
+    if (props.showRequired) {
+        return validate(username.value, [required, length({ min: 5, max: 10 })])
+    } else {
+        return validate(username.value, [length({ min: 5, max: 10 })])
+    }
 });
 
 const password = ref('');
 
 const passwordStatus = computed(() => {
-  return validate(password.value, [required, length({min: 10, max: 40})])
-})
+    if (props.showRequired) {
+        return validate(password.value, [required, length({ min: 10, max: 40 })])
+    } else {
+        return validate(password.value, [length({ min: 10, max: 40 })])
+    }
+});
 
 const isInvalid = computed(() => {
     return (!usernameStatus.value.valid || !passwordStatus.value.valid)
-})
+});
 
 async function handleSubmit() {
-
     if (isInvalid.value) {
+        usernameStatus;
         return;
     }
 
@@ -50,7 +71,7 @@ async function handleSubmit() {
 
 <template>
     <form class="form" @submit.prevent="handleSubmit">
-        <FormInput name="Username" type="text" v-model="username" :status="usernameStatus" />
+        <FormInput name="Username" type="text" v-model="username" :status="usernameStatus"/>
         <FormInput name="Password" type="password" v-model="password" :status="passwordStatus" />
         <div v-if="error" class="is-danger help">
             {{ error }}
