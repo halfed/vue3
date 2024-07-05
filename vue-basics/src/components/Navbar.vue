@@ -1,11 +1,18 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 import { useModal } from "../composables/modal";
 import { useUsers } from "../stores/users";
 import SignupForm from "./UserForm.vue";
 
 
 const modal = useModal();
-const usersStore = useUsers()
+const usersStore = useUsers();
+const router = useRouter();
+
+async function logout() {
+    await usersStore.logout();
+    router.push({ path: "/" });
+}
 </script>
 
 <template>
@@ -17,7 +24,7 @@ const usersStore = useUsers()
                 <RouterLink to="/posts/new" class="button">New Posts</RouterLink>
                 <button 
                 class="button"
-                @click="usersStore.logout()"
+                @click="logout()"
                 >Log Out</button>
             </div>
 
