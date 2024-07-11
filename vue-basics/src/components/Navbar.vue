@@ -32,10 +32,12 @@ async function logout() {
                 v-else
                 class="buttons">
                 <button 
+                id="sign-up"
                 class="button"
                 @click="modal.showModal('signUp')"
                 >Sign Up</button>
                 <button 
+                id="sign-in"
                 class="button"
                 @click="modal.showModal('signIn')"
                 >Sign In</button>
