@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, watchEffect } from "vue";
-import { TimelinePost } from "../posts";
+import { Post, TimelinePost } from "../posts";
 import { useRouter } from "vue-router";
 import { marked } from "marked";
 import highlightjs from "highlight.js";
 import debounce from "lodash/debounce";
 import { usePosts } from "../stores/posts";
+import { useUsers } from "../stores/users";
 
 
 const props = defineProps < {
-    post: TimelinePost
+    post: Post | TimelinePost;
 }>()
+
+const emit = defineEmits<{
+    (event: "submit", post: Post): void
+}>();
 
 const title = ref(props.post.title);
 const content = ref(props.post.markdown);
@@ -20,6 +25,7 @@ const contentEditable = ref<HTMLDivElement>();
 // STORE
 const posts = usePosts();
 const router = useRouter();
+const userStore = useUsers();
 
 
 function parseHtml(markdown: string) {
@@ -72,14 +78,22 @@ function handleInput() {
 }
 
 async function handleClick() {
-    const newPost: TimelinePost = {
+    if(!userStore.currentUserId) {
+        throw Error('User was not found');
+    }
+
+    const newPost: Post = {
         ...props.post,
+        created: props.post.created === 'string' ? props.post.created : props.post.created.toString(),
         title: title.value,
+        authorId: userStore.currentUserId,
         markdown: content.value,
         html: html.value,
     }
-    await posts.createPost(newPost);
-    router.push("/")
+    // await posts.createPost(newPost);
+    // router.push("/")
+    // now we will emit the type of submit, edit / new post
+    emit('submit', newPost);
 }
 </script>
 
@@ -110,7 +124,7 @@ async function handleClick() {
             <button 
             class="button is-primary is-pulled-right"
             @click="handleClick">
-                Saved Post
+                Save Post
             </button>
         </div>
     </div>
