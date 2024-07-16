@@ -12,7 +12,8 @@ export const useUsers = defineStore("users", {
 
     actions: {
         async authenticate() {
-            setTimeout(async () => {
+            // THIS TIME OUT IS TO TEST OUT A RACE CONDITION ISSUE FOR HOMEWORK
+            // setTimeout(async () => {
                 try {
                     const res = await window.fetch("/api/current-user", {
                         headers: {
@@ -24,7 +25,7 @@ export const useUsers = defineStore("users", {
                 } catch (e) {
                     this.currentUserId = undefined;
                 }
-            }, 1000)
+            // }, 1000)
         },
         
         async logout() {
