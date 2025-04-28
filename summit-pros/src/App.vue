@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, inject } from "vue";
 import Navbar from "./components/Navbar.vue";
 import { useModal } from "./composables/modal";
 import { useUsers } from "./stores/users";
@@ -13,15 +13,8 @@ const modalStyle = computed(() => {
   }
 })
 
-// async function authenticate() {
-//   const res = await window.fetch("/api/current-user", {
-//     headers: {
-//       'Content-Type': 'application/json',
-//     }
-//   })
-//   console.log(await res.json());
-// }
-//usersStore.authenticate();
+
+usersStore.authenticate();
 </script>
 
 <template>
@@ -39,6 +32,11 @@ const modalStyle = computed(() => {
     class="modal-close is-large"
     @click="modal.hideModal()"
     ></button>
+
+    <v-btn
+      class="modal-close is-large"
+      @click="modal.hideModal()"
+    ></v-btn>
   </div>
 
   <div class="section">

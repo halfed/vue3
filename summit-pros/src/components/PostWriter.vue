@@ -37,23 +37,21 @@ function parseHtml(markdown: string) {
         },
     }, (err, parseResult) => {
         html.value = parseResult;
-        console.log(parseResult);
     })
 }
 
 // BOTH HAVE THE SAME EFFECT OF WATCH
-// watchEffect(() => {
-//     marked.parse(content.value, {
-//         gfm: true,
-//         breaks: true,
-//         highlight: (code) => {
-//             return highlightjs.highlightAuto(code).value
-//         },
-//     }, (err, parseResult) => {
-//         html.value = parseResult;
-//         console.log(parseResult);
-//     })
-// })
+watchEffect(() => {
+    marked.parse(content.value, {
+        gfm: true,
+        breaks: true,
+        highlight: (code) => {
+            return highlightjs.highlightAuto(code).value
+        },
+    }, (err, parseResult) => {
+        html.value = parseResult;
+    })
+})
 
 watch(content, debounce((newContent) => {
     parseHtml(newContent) 

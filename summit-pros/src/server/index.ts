@@ -1,16 +1,31 @@
-import express, { Request, Response } from "express"
+require('dotenv').config();
+
+import express, { type Request, type Response } from "express"
 import cors from "cors"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import jsonwebtoken from "jsonwebtoken"
-import { today, thisWeek, thisMonth, Post } from "../posts"
-import { NewUser, User } from "../users"
+const con = require('./demo_db_connection')
+
+//import connection from "./demo_db_connection"
+import { today, thisWeek, thisMonth, type Post } from "../posts"
+import type { NewUser, User } from "../users"
+
 
 
 const app = express()
 app.use(cors())
 app.use(cookieParser())
 app.use(bodyParser.json())
+
+
+// con.connect(function (err) {
+//       if (err) throw err;
+//       console.log("Connected!");
+    
+// });
+
+
 
 const allPosts = [today, thisWeek, thisMonth];
 const allUsers: User[] = [];
@@ -40,18 +55,18 @@ app.post<{}, {}, Post>("/posts", (req, res) => {
     res.json(post)
 })
 
-const SECRET = 'my-secret'
-const COOKIE = 'vuejs-jwt'
+const SECRET: string = process.env.SECRET as string
+const COOKIE: string = process.env.COOKIE as string
+const ISSUER: string = process.env.ISSUER as string
 
 function authenticate(id: string, req: Request, res: Response) {
     const token = jsonwebtoken.sign({ id }, SECRET, {
-        issuer: 'vuejs-course',
+        issuer: ISSUER,
         expiresIn: '30 days'
     })
 
-    // console.log(req);
-
-    res.cookie(COOKIE, token, { httpOnly: true })
+    //we need to add {httpOnly: true} back in for security
+    res.cookie(COOKIE, token )
 }
 
 app.get("/current-user", (req, res) => {
@@ -66,8 +81,8 @@ app.get("/current-user", (req, res) => {
 })
 
 app.post("/logout", (req, res) => {
-    //console.log(req);
-    res.cookie(COOKIE, "", { httpOnly: true });
+    //we need to add {httpOnly: true} back in for security
+    res.cookie(COOKIE, "");
     res.status(200).end();
 })
 
@@ -90,6 +105,85 @@ app.post<{}, {}, NewUser>("/users", (req, res) => {
     res.json(rest)
 })
 
+const authenticateToken = (req, res, next) => {
+    console.log("Getting Token")
+    
+    //WHEN GETTING TOKEN FROM COOKIE
+    // const token = req.cookies[COOKIE]
+
+    //     console.log("token: ", token);
+    //   if (token == null) {
+    //     return res.sendStatus(401); // No token, unauthorized
+    //   }
+
+    //   jsonwebtoken.verify(token, SECRET, (err, user) => {
+    //     if (err) {
+    //       return res.sendStatus(403); // Invalid token, forbidden
+    //     }
+
+    //     req.user = user;
+    //     next(); // Token is valid, proceed to the next middleware or route handler
+    //   });
+
+    const authHeader = req.headers['authorization'];
+    let token = null;
+
+    if (authHeader) {
+        // Split the header into its parts
+        const parts = authHeader.split(' ');
+
+        // Check if the header follows the "Bearer <token>" format
+        if (parts.length === 2 && parts[0].toLowerCase() === 'bearer') {
+            token = parts[1]; // Get the token
+            console.log("token", token);
+
+            if (token == null) {
+                return res.sendStatus(401); // No token, unauthorized
+            }
+
+            jsonwebtoken.verify(token, SECRET, (err, user) => {
+                if (err) {
+                    return res.sendStatus(403); // Invalid token, forbidden
+                }
+
+                req.user = user;
+                next(); // Token is valid, proceed to the next middleware or route handler
+            });
+        }
+    } else {
+        return res.sendStatus(401); // No token, unauthorized
+    }
+}
+
+app.get('/summit-users', authenticateToken, (req, res) => {
+    // Now, this route handler can assume the user is authenticated.
+    // The authentication logic has been abstracted into the middleware.
+    // Other routes can also reuse the 'authenticateUser' middleware.
+    con.query('SELECT * FROM sm_users', (err, results) => {
+        if (err) {
+            console.error('Error querying the database:', err);
+            res.status(500).send('Server error');
+            return;
+        }
+        console.log(results);
+        res.json(results);
+    });
+});
+
+app.get('/work-ticket', authenticateToken, (req, res) => {
+    // Now, this route handler can assume the user is authenticated.
+    // The authentication logic has been abstracted into the middleware.
+    // Other routes can also reuse the 'authenticateUser' middleware.
+    con.query('SELECT * FROM work_ticket', (err, results) => {
+        if (err) {
+            console.error('Error querying the database:', err);
+            res.status(500).send('Server error');
+            return;
+        }
+        res.json(results);
+    });
+});
+
 app.listen(8000, () => {
     console.log('Listening on port 8000')
-})
+});

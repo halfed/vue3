@@ -70,16 +70,16 @@ async function handleSubmit() {
 </script>
 
 <template>
-    <form class="form" @submit.prevent="handleSubmit">
-        <FormInput name="Username" type="text" v-model="username" :status="usernameStatus"/>
-        <FormInput name="Password" type="password" v-model="password" :status="passwordStatus" />
-        <div v-if="error" class="is-danger help">
+    <v-sheet class="mx-auto" width="300">
+    <v-form @submit.prevent="handleSubmit" class="form">
+      <FormInput name="Username" type="text" v-model="username" :status="usernameStatus"/>
+      <FormInput name="Password" type="password" v-model="password" :status="passwordStatus" />
+      <div v-if="error" class="is-danger help">
             {{ error }}
-        </div>
-        <button class="button" :disabled="isInvalid">
-            Submit
-        </button>    
-    </form>
+      </div>
+      <v-btn class="mt-2" type="submit" block>Submit</v-btn>
+    </v-form>
+  </v-sheet>
 </template>
 
 <style scoped>
