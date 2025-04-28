@@ -1,49 +1,7 @@
-// USING A CLASS TO BUILD OUT A STORE
-// import { reactive, readonly } from "vue";
-
-// // ref number, string
-// //computed
-// //reactive {}, Map, Set
-
-// interface PostState {
-//     foo: string
-// }
-
-// export class PostsStrore {
-//     #state: PostState
-
-//     constructor() {
-//         this.#state = reactive<PostState>({
-//             foo: 'foo'
-//         })
-//     }
-
-//     getState() {
-//         return readonly(this.#state)
-//     }
-
-//     updateFoo(foo: string) {
-//         this.#state.foo = foo
-//     }
-// }
-
-// const store = new PostsStrore()
-
-// store.getState().foo;
-
-// export function usePosts() {
-//     return store
-// }
-
-// NOW WITH Pinia
 import { DateTime } from "luxon"
 import { defineStore } from "pinia"
-import { type Period } from "../constants"
-import { type TimelinePost, type Post} from '../posts'
-
-// interface PostsState {
-//     foo: string
-// }
+import { Period } from "../constants"
+import { TimelinePost, Post} from '../posts'
 
 interface PostsState {
     ids: string[]
@@ -68,21 +26,21 @@ export const usePosts = defineStore("posts", {
         }, 
 
         async fetchPosts() {
-            //debugger;
-            //const res = await window.fetch("/api/posts")
-            //const data = (await res.json()) as Post[]
+
+            const res = await window.fetch("/api/posts")
+            const data = (await res.json()) as Post[]
 
             await delay()
 
-            // let ids: string[] = []
-            // let all = new Map<string, Post>()
-            // for (const post of data) {
-            //     ids.push(post.id)
-            //     all.set(post.id, post)
-            // }
+            let ids: string[] = []
+            let all = new Map<string, Post>()
+            for (const post of data) {
+                ids.push(post.id)
+                all.set(post.id, post)
+            }
 
-            // this.ids = ids
-            // this.all = all
+            this.ids = ids
+            this.all = all
         },
 
         createPost(post: Post) {

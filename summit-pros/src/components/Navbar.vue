@@ -21,6 +21,7 @@ async function logout() {
             <div
                 v-if="usersStore.currentUserId" 
                 class="buttons">
+                <RouterLink to="/maintenance/work-ticket" class="button">Work Ticket</RouterLink>
                 <RouterLink to="/posts/new" class="button">New Posts</RouterLink>
                 <button 
                 class="button"

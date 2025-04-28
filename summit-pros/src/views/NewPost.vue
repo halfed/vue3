@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DateTime } from "luxon";
 import PostWriter from "../components/PostWriter.vue";
-import { Post, TimelinePost } from "../posts";
+import type { Post, TimelinePost } from "../posts";
 import { useUsers } from "../stores/users";
 import { useRouter } from "vue-router";
 import { usePosts } from "../stores/posts";
