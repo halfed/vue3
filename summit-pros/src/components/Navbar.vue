@@ -21,27 +21,33 @@ async function logout() {
             <div
                 v-if="usersStore.currentUserId" 
                 class="buttons">
-                <RouterLink to="/maintenance/work-ticket" class="button">Work Ticket</RouterLink>
-                <RouterLink to="/posts/new" class="button">New Posts</RouterLink>
-                <button 
-                class="button"
-                @click="logout()"
-                >Log Out</button>
+                <v-btn
+                    to="/maintenance/work-ticket">
+                    Work Ticket
+                </v-btn>
+                <v-btn
+                    to="/posts/new">
+                    New Posts
+                </v-btn>
+                <v-btn
+                    @click="logout">
+                    Log Out
+                </v-btn>
             </div>
 
             <div 
                 v-else
                 class="buttons">
-                <button 
-                id="sign-up"
-                class="button"
-                @click="modal.showModal('signUp')"
-                >Sign Up</button>
-                <button 
-                id="sign-in"
-                class="button"
-                @click="modal.showModal('signIn')"
-                >Sign In</button>
+                <v-btn
+                    id="sign-up"
+                    @click="modal.showModal('signUp')">
+                    Sign Up
+                </v-btn>
+                <v-btn
+                    id="sign-in"
+                    @click="modal.showModal('signIn')">
+                    Sign In
+                </v-btn>
             </div>
         </div>
     </div>

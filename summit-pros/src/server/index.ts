@@ -18,15 +18,6 @@ app.use(cors())
 app.use(cookieParser())
 app.use(bodyParser.json())
 
-
-// con.connect(function (err) {
-//       if (err) throw err;
-//       console.log("Connected!");
-    
-// });
-
-
-
 const allPosts = [today, thisWeek, thisMonth];
 const allUsers: User[] = [];
 
@@ -106,24 +97,6 @@ app.post<{}, {}, NewUser>("/users", (req, res) => {
 })
 
 const authenticateToken = (req, res, next) => {
-    console.log("Getting Token")
-    
-    //WHEN GETTING TOKEN FROM COOKIE
-    // const token = req.cookies[COOKIE]
-
-    //     console.log("token: ", token);
-    //   if (token == null) {
-    //     return res.sendStatus(401); // No token, unauthorized
-    //   }
-
-    //   jsonwebtoken.verify(token, SECRET, (err, user) => {
-    //     if (err) {
-    //       return res.sendStatus(403); // Invalid token, forbidden
-    //     }
-
-    //     req.user = user;
-    //     next(); // Token is valid, proceed to the next middleware or route handler
-    //   });
 
     const authHeader = req.headers['authorization'];
     let token = null;
@@ -135,7 +108,6 @@ const authenticateToken = (req, res, next) => {
         // Check if the header follows the "Bearer <token>" format
         if (parts.length === 2 && parts[0].toLowerCase() === 'bearer') {
             token = parts[1]; // Get the token
-            console.log("token", token);
 
             if (token == null) {
                 return res.sendStatus(401); // No token, unauthorized
@@ -165,7 +137,6 @@ app.get('/summit-users', authenticateToken, (req, res) => {
             res.status(500).send('Server error');
             return;
         }
-        console.log(results);
         res.json(results);
     });
 });
@@ -183,6 +154,14 @@ app.get('/work-ticket', authenticateToken, (req, res) => {
         res.json(results);
     });
 });
+
+// app.get('/work-tasks', authenticateToken, (req, res) => {
+//     // Now, this route handler can assume the user is authenticated.
+//     // The authentication logic has been abstracted into the middleware.
+//     // Other routes can also reuse the 'authenticateUser' middleware.
+
+//     con.query('SELECT * from work_tasks where id ')
+// })
 
 app.listen(8000, () => {
     console.log('Listening on port 8000')
