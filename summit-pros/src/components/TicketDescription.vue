@@ -8,7 +8,8 @@ const axios: any = inject('axios')  // inject axios
 const cookie = useCookie();
 
 const token = cookie.getCookie('summit-pros-jwt');
-let workItems = ref([]);
+const workItemNumber = ref();
+const workItems = ref([]);
 
 const getList = async () => {
       axios
@@ -19,6 +20,7 @@ const getList = async () => {
         })
         .then((response: { data: any }) => {
           workItems.value = response.data;
+          workItemNumber.value = response.data[0].id;
         });
     };
 
@@ -39,18 +41,36 @@ const getList = async () => {
 
 
 <template>
-  <v-data-table-virtual
-    :headers="headers"
-    :items="workItems"
-    height="400"
-    item-value="name"
-    @update:options="getList"
-  ></v-data-table-virtual>
+  <div class="maintenance-header">
+    <span class="maintenance-title"><b>MAINTENANCE WORK TICKET</b> {{ workItemNumber }}</span>
+    <v-data-table-virtual
+      :headers="headers"
+      :items="workItems"
+      class="ed-table border-sm"
+      height="400"
+      item-value="name"
+      @update:options="getList"
+    ></v-data-table-virtual>
+  </div>
+  
 
 </template>
 
 <style lang="scss">
-    
+  .maintenance-header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .maintenance-title {
+    align-self: flex-end;
+  }
+
+  .v-data-table th {
+    background-color: #336699;
+    color: #FFF;
+  }
+
   .wo-location {
     .v-data-table__thead {
     background-color: yellow;
