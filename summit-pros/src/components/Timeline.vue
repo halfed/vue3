@@ -12,7 +12,7 @@ await postsStore.fetchPosts();
 <template>
 
 	<nav class="is-primary panel">
-		<span class="panel-tabs">
+		<span class="panel-tabs timeline">
 			<a 
 				v-for="period of periods"
 				:key="period"
@@ -29,3 +29,9 @@ await postsStore.fetchPosts();
 		/>
 	</nav>
 </template>
+
+<style lang="scss">
+	.timeline {
+		background-color: #FFFFFF;
+	}
+</style>

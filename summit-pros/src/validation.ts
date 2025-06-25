@@ -29,7 +29,6 @@ export const required: Rule = (value: string): Status => {
 }
 
 export function validate(value: string, rules: Rule[]): Status {
-    // console.log('rules', rules);
     for (const rule of rules) {
         const result = rule(value)
         if (!result.valid) {

@@ -1,5 +1,5 @@
 require('dotenv').config();
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 // const port = process.env.PORT || 5000;
 
@@ -32,31 +32,4 @@ module.exports = con;
 //   con.connect(function (err) {
 //   if (err) throw err;
 //   console.log("Connected!");
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-//       // con.query('SELECT * FROM sm_users', function (err, results, fields) {
-//       //   if (err) throw err;
-//       //   console.log(results);
-//       // });
-   
-//   });
-
-  
-
-
-  
-// }
 

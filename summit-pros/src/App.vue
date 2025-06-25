@@ -41,6 +41,7 @@ usersStore.authenticate();
 
   <div class="section">
     <div class="container">
+      <div class="business-title">MTEK LTD.</div>
       <Navbar />
       <RouterView />
     </div>
@@ -50,6 +51,7 @@ usersStore.authenticate();
 <style>
 @import "https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css";
 @import "highlight.js/styles/atom-one-dark.css";
+@import "style.css";
 
 ul {
   list-style: revert !important;
