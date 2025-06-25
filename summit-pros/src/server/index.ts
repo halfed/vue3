@@ -131,7 +131,8 @@ app.get('/summit-users', authenticateToken, (req, res) => {
     // Now, this route handler can assume the user is authenticated.
     // The authentication logic has been abstracted into the middleware.
     // Other routes can also reuse the 'authenticateUser' middleware.
-    con.query('SELECT * FROM sm_users', (err, results) => {
+
+    con.query('SELECT * FROM users', (err, results) => {
         if (err) {
             console.error('Error querying the database:', err);
             res.status(500).send('Server error');
@@ -141,11 +142,41 @@ app.get('/summit-users', authenticateToken, (req, res) => {
     });
 });
 
-app.get('/work-ticket', authenticateToken, (req, res) => {
+// app.get('/work-ticket', authenticateToken, (req, res) => {
+//     // Now, this route handler can assume the user is authenticated.
+//     // The authentication logic has been abstracted into the middleware.
+//     // Other routes can also reuse the 'authenticateUser' middleware.
+//     con.query('SELECT * FROM work_ticket', (err, results) => {
+//         if (err) {
+//             console.error('Error querying the database:', err);
+//             res.status(500).send('Server error');
+//             return;
+//         }
+//         res.json(results);
+//     });
+// });
+
+app.get('/work-ticket/:id', authenticateToken, (req, res) => {
     // Now, this route handler can assume the user is authenticated.
     // The authentication logic has been abstracted into the middleware.
     // Other routes can also reuse the 'authenticateUser' middleware.
-    con.query('SELECT * FROM work_ticket', (err, results) => {
+    const { id } = req.params;
+    con.query('SELECT id, type, completion_time, payout, schedule,' +
+                'status, access, property FROM work_ticket where property_id = ' + id, (err, results) => {
+        if (err) {
+            console.error('Error querying the database:', err);
+            res.status(500).send('Server error');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/work-properties', authenticateToken, (req, res) => {
+    // Now, this route handler can assume the user is authenticated.
+    // The authentication logic has been abstracted into the middleware.
+    // Other routes can also reuse the 'authenticateUser' middleware.
+    con.query('SELECT id, name, address, type FROM properties', (err, results) => {
         if (err) {
             console.error('Error querying the database:', err);
             res.status(500).send('Server error');

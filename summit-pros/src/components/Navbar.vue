@@ -22,8 +22,8 @@ async function logout() {
                 v-if="usersStore.currentUserId" 
                 class="buttons">
                 <v-btn
-                    to="/maintenance/work-ticket">
-                    Work Ticket
+                    to="/maintenance/properties">
+                    Properties
                 </v-btn>
                 <v-btn
                     to="/posts/new">

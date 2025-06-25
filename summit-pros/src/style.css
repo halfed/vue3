@@ -15,19 +15,28 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #213547;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #213547;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  background: #191919;
+  background: linear-gradient(0deg,rgba(25, 25, 25, 1) 0%, rgba(66, 66, 66, 1) 100%);
+  /* display: flex;
+  place-items: center; */
+  /* min-width: 320px;
+  min-height: 100vh; */
+}
+
+.business-title {
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 150%;
+  margin-bottom: 20px;
 }
 
 h1 {
@@ -35,7 +44,7 @@ h1 {
   line-height: 1.1;
 }
 
-button {
+/* button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -52,17 +61,14 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
+} */
 
 .card {
   padding: 2em;
 }
 
 #app {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
 @media (prefers-color-scheme: light) {
@@ -76,4 +82,23 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/*  #282828   */
+
+/*  table styles  */
+.v-data-table th {
+    background-color: #191919;
+    color: #FFF;
+  }
+
+table td, table th {
+    vertical-align: middle;
+}
+
+.v-data-table .v-table__wrapper > table > 
+thead > tr > th.v-data-table__th--sortable:hover, 
+.v-data-table .v-table__wrapper > table tbody > tr > 
+th.v-data-table__th--sortable:hover {
+  color: #FFFFFF;
 }

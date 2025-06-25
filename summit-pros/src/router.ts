@@ -4,6 +4,7 @@ import NewPost from "./views/NewPost.vue"
 import ShowPost from "./views/ShowPost.vue";
 import EditPost from "./views/EditPost.vue";
 import WorkTicket from "./views/WorkTicket.vue";
+import Properties from "./views/Properties.vue";
 import { useUsers } from "./stores/users";
 
 export const routes = [
@@ -32,8 +33,13 @@ export const routes = [
         component: ShowPost,
     },
     {
-        path: "/maintenance/work-ticket",
+        path: "/maintenance/work-ticket/:id",
+        name: 'workTicket',
         component: WorkTicket,
+    },
+    {
+        path: "/maintenance/properties",
+        component: Properties,
     }
     ]
 

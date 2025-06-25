@@ -1,0 +1,40 @@
+Project Structure:
+Root Directory:
+
+frontend/: Contains all your frontend code (HTML, CSS, JavaScript, React/Angular/Vue apps, etc.).
+backend/ or server/: Contains your Express.js backend code.
+package.json: For the entire project (optional, can have separate ones in frontend/backend).
+
+Backend (backend/ or server/)
+app.js or index.js: Main entry point for your Express app.
+routes/: Contains route definitions for your API endpoints.
+controllers/: Handles the logic for each route.
+models/: Defines data models for your application.
+config/: Configuration files for your application.
+middleware/: Custom middleware functions.
+utils/: Utility functions.
+
+Frontend (frontend/)
+index.html: Main HTML file.
+css/: Stylesheets.
+js/: JavaScript files, including any front-end frameworks (React, Angular, Vue).
+assets/: Images, fonts, etc.
+build/ or dist/: Output folder for built frontend code (if using build tools).
+
+
+Key Considerations:
+Separate Repositories: For complex projects, consider keeping the frontend and backend in separate repositories.
+
+API Communication: Your frontend will send requests to your backend API endpoints.
+
+Static Files: Use express.static middleware to serve static files (HTML, CSS, JS) from your frontend's build/ or dist/ folder.
+
+Build Process: Use tools like Webpack or Parcel to bundle your frontend code.
+
+Development: During development, you might run the frontend and backend on separate ports.
+
+
+
+filter() method can filter out properties in an array of objects
+
+const filteredValue = array.filter(object => object.key <, >, ===, !== [a value];)

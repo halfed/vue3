@@ -2,47 +2,48 @@
 import { onMounted, ref, reactive } from 'vue';
 import { useCookie } from 'vue-cookie-next'
 import { inject } from 'vue'
+import { useRoute } from 'vue-router'
 
+
+const route = useRoute()
 const axios: any = inject('axios')  // inject axios
 
 const cookie = useCookie();
-
-const token = cookie.getCookie('summit-pros-jwt');
+const token = cookie.getCookie('summit-property-jwt');
 const workItemNumber = ref();
 const workItems = ref([]);
 
 const getList = async () => {
+  const queryParam = route.params.id;
       axios
-        .get("/api/work-ticket", {
+        .get(`/api/work-ticket/${queryParam}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
         .then((response: { data: any }) => {
-          workItems.value = response.data;
-          workItemNumber.value = response.data[0].id;
+          if (response.data.length) {
+            workItems.value = response.data;
+            workItemNumber.value = response.data[0].id;
+          }
         });
     };
 
-  onMounted(async () => {
-    getList();
-  });
-
-  const headers:any = reactive([
-        { title: 'Type', align: 'start', key: 'type' },
-        { title: 'Time To Completion', align: 'end', key: 'time' },
-        { title: 'Total Payout', align: 'end', key: 'payout' },
-        { title: 'Schedule', align: 'end', key: 'schedule' },
-        { title: 'Status', align: 'end', key: 'status' },
-        { title: 'Access', align: 'end', key: 'access' },
-        { title: 'Property', align: 'end', key: 'property' },
-      ],)
+const headers:any = reactive([
+      { title: 'Type', align: 'start', key: 'type' },
+      { title: 'Time To Completion', key: 'time' },
+      { title: 'Total Payout', key: 'payout' },
+      { title: 'Schedule', key: 'schedule' },
+      { title: 'Status', key: 'status' },
+      { title: 'Access', key: 'access' },
+      { title: 'Property', key: 'property' },
+    ],)
 </script>
 
 
 <template>
   <div class="maintenance-header">
-    <span class="maintenance-title"><b>MAINTENANCE WORK TICKET</b> {{ workItemNumber }}</span>
+    <span class="maintenance-title"><b>MAINTENANCE WORK TICKET {{ workItemNumber }}</b></span>
     <v-data-table-virtual
       :headers="headers"
       :items="workItems"
@@ -52,7 +53,7 @@ const getList = async () => {
       @update:options="getList"
     ></v-data-table-virtual>
   </div>
-  
+  <!-- @update:options="getList"-->
 
 </template>
 
@@ -64,11 +65,8 @@ const getList = async () => {
 
   .maintenance-title {
     align-self: flex-end;
-  }
-
-  .v-data-table th {
-    background-color: #336699;
-    color: #FFF;
+    color: #FFFFFF;
+    padding: 10px 0;
   }
 
   .wo-location {
