@@ -3,7 +3,7 @@ import { onMounted, ref, reactive } from 'vue';
 import { useCookie } from 'vue-cookie-next'
 import { inject } from 'vue'
 import { useRoute } from 'vue-router'
-
+import { propertiesStore } from '../stores/properties'
 
 const route = useRoute()
 const axios: any = inject('axios')  // inject axios
@@ -12,9 +12,13 @@ const cookie = useCookie();
 const token = cookie.getCookie('summit-property-jwt');
 const workItemNumber = ref();
 const workItems = ref([]);
+const propertyStore = propertiesStore();
+const queryParam: any = Number(route.params.id);
+const theProperty = propertyStore.getFilteredProperty(queryParam)
+const individualProperty = theProperty.get(queryParam)
 
 const getList = async () => {
-  const queryParam = route.params.id;
+  
       axios
         .get(`/api/work-ticket/${queryParam}`, {
           headers: {
@@ -23,7 +27,11 @@ const getList = async () => {
         })
         .then((response: { data: any }) => {
           if (response.data.length) {
-            workItems.value = response.data;
+
+            workItems.value = response.data.map(item => ({
+              ...item,
+                property: individualProperty?.name
+            }))
             workItemNumber.value = response.data[0].id;
           }
         });

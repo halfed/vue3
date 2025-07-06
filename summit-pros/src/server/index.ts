@@ -5,7 +5,8 @@ import cors from "cors"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import jsonwebtoken from "jsonwebtoken"
-const con = require('./demo_db_connection')
+//const con = require('./db_connection')
+import pool from './db_connection';
 
 //import connection from "./demo_db_connection"
 import { today, thisWeek, thisMonth, type Post } from "../posts"
@@ -14,6 +15,7 @@ import type { NewUser, User } from "../users"
 
 
 const app = express()
+let connection;
 app.use(cors())
 app.use(cookieParser())
 app.use(bodyParser.json())
@@ -127,63 +129,59 @@ const authenticateToken = (req, res, next) => {
     }
 }
 
-app.get('/summit-users', authenticateToken, (req, res) => {
+app.get('/summit-users', authenticateToken, async (req, res) => {
     // Now, this route handler can assume the user is authenticated.
     // The authentication logic has been abstracted into the middleware.
     // Other routes can also reuse the 'authenticateUser' middleware.
 
-    con.query('SELECT * FROM users', (err, results) => {
-        if (err) {
-            console.error('Error querying the database:', err);
-            res.status(500).send('Server error');
-            return;
-        }
+    try {
+        const [results] = await pool.query('SELECT * FROM users');
         res.json(results);
-    });
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).json({ message: 'Error fetching users' });
+    } finally {
+        if (connection) connection.release(); // Release the connection back to the pool
+    }
 });
 
-// app.get('/work-ticket', authenticateToken, (req, res) => {
-//     // Now, this route handler can assume the user is authenticated.
-//     // The authentication logic has been abstracted into the middleware.
-//     // Other routes can also reuse the 'authenticateUser' middleware.
-//     con.query('SELECT * FROM work_ticket', (err, results) => {
-//         if (err) {
-//             console.error('Error querying the database:', err);
-//             res.status(500).send('Server error');
-//             return;
-//         }
-//         res.json(results);
-//     });
-// });
-
-app.get('/work-ticket/:id', authenticateToken, (req, res) => {
+app.get('/work-ticket/:id', authenticateToken, async (req, res) => {
     // Now, this route handler can assume the user is authenticated.
     // The authentication logic has been abstracted into the middleware.
     // Other routes can also reuse the 'authenticateUser' middleware.
+    connection = await pool.getConnection();
     const { id } = req.params;
-    con.query('SELECT id, type, completion_time, payout, schedule,' +
-                'status, access, property FROM work_ticket where property_id = ' + id, (err, results) => {
-        if (err) {
-            console.error('Error querying the database:', err);
-            res.status(500).send('Server error');
-            return;
+    try {
+        const [results] = await connection.execute('SELECT id, type, completion_time, payout, schedule,' +
+            'status, access FROM work_ticket where property_id = ' + id);
+        if (results.length === 0) {
+            res.status(404).send('Properties not found.');
+            return [];
+        } else {
+            res.status(200).json(results);
         }
-        res.json(results);
-    });
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).json({ message: 'Error fetching users' });
+    } finally {
+        if (connection) connection.release(); // Release the connection back to the pool
+    }
 });
 
-app.get('/work-properties', authenticateToken, (req, res) => {
+app.get('/work-properties', authenticateToken, async (req, res) => {
     // Now, this route handler can assume the user is authenticated.
     // The authentication logic has been abstracted into the middleware.
     // Other routes can also reuse the 'authenticateUser' middleware.
-    con.query('SELECT id, name, address, type FROM properties', (err, results) => {
-        if (err) {
-            console.error('Error querying the database:', err);
-            res.status(500).send('Server error');
-            return;
-        }
-        res.json(results);
-    });
+    connection = await pool.getConnection();
+    try {
+        const [results] = await connection.execute('SELECT id, name, address, type FROM properties');
+        res.status(200).json(results);
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).json({ message: 'Error fetching users' });
+    } finally {
+        if (connection) connection.release(); // Release the connection back to the pool
+    }
 });
 
 // app.get('/work-tasks', authenticateToken, (req, res) => {
@@ -193,6 +191,18 @@ app.get('/work-properties', authenticateToken, (req, res) => {
 
 //     con.query('SELECT * from work_tasks where id ')
 // })
+
+process.on('SIGINT', async () => {
+  console.log('Received SIGINT. Shutting down gracefully...');
+  try {
+    await pool.end();
+    console.log('Database pool closed.');
+    process.exit(0);
+  } catch (err) {
+    console.error('Error closing database pool:', err);
+    process.exit(1);
+  }
+});
 
 app.listen(8000, () => {
     console.log('Listening on port 8000')

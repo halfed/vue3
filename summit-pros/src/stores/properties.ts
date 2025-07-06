@@ -3,7 +3,7 @@ import { Properties } from '../properties'
 import { property } from "lodash"
 
 interface PropertiesState {
-    propertyIds: string[]
+    //propertyIds: string[]
     allProperties: Map<string, Properties>
 }
 
@@ -13,7 +13,7 @@ interface PropertyAddress extends Omit<PropertiesState, 'propertyIds'> {
 
 export const propertiesStore = defineStore("properties", {
     state: (): PropertiesState => ({
-        propertyIds: [],
+        //propertyIds: [],
         allProperties: new Map(),
     }),
 
@@ -26,26 +26,29 @@ export const propertiesStore = defineStore("properties", {
                 all.set(property.id, property)
             }
 
-            this.propertyIds = ids
+            //this.propertyIds = ids
             this.allProperties = all
-        }
+        },
+        async fetchItemDetails(propertyId) {
+          // Simulate an API call or data retrieval based on the ID
+          return new Map(
+                
+                [...this.allProperties.entries()].filter(([key, value]) => value.id === propertyId
+                ));
+          // In a real application, you would make an API call here:
+          // const response = await fetch(`/api/items/${id}`);
+          // this.itemDetails = await response.json();
+        },
     },
 
     getters: {
         
         ////GETTING PROPERTY, FILTERED BASED ON ID
         getFilteredProperty: (state) => {
-            // let propertyAddress: any = undefined;
-            // return (propertyId) => state.allProperties.forEach((value, key) => {
-            //     if (value.id === propertyId) {
-            //         propertyAddress = value;
-            //     }
-            // });
             return (propertyId: number) => new Map(
+                
                 [...state.allProperties.entries()].filter(([key, value]) => value.id === propertyId
                 ));
-            
-            // return filteredMap;
         }
     }
 });
