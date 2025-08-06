@@ -1,0 +1,57 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`About > renders correctly 1`] = `
+<div
+  class="flat-page"
+>
+  <h1>
+    Our Mission
+  </h1>
+  <p>
+    At MTEK, our mission is to deliver professional, high-quality services across property management, automotive repair, and software engineering all at competitive prices. We aim to simplify operations and solve complex challenges for our clients through dependable execution, technical excellence, and a commitment to long-term value.
+  </p>
+  <p>
+     By combining hands-on expertise with modern tools and processes, we serve as a trusted partner to property managers, car owners, and technology-driven organizations. Whether we're maintaining real estate, repairing vehicles, or developing software systems, our approach is rooted in precision, accountability, and customer focus. 
+  </p>
+  <p>
+     We believe that great service should be accessible, reliable, and efficient. that's why MTEK is built on clear communication, integrated solutions, and a team of professionals who take pride in delivering results on time and on budget. 
+  </p>
+</div>
+`;
+
+exports[`Automotive > renders correctly 1`] = `
+<div>
+  <h1>
+    Automotive Repair & Diagnostics
+  </h1>
+  <p>
+     Our automotive division offers expert service for individual car owners, commercial fleets, and small businesses that rely on vehicle uptime. With ASE-certified technicians and a transparent, customer-first approach, we provide accurate diagnostics and reliable repairs quickly and affordably. 
+  </p>
+  <h2>
+    Services Include:
+  </h2>
+  <ul>
+    <li>
+      Engine and transmission diagnostics
+    </li>
+    <li>
+      Brake service and suspension repair
+    </li>
+    <li>
+      Battery replacement and charging systems
+    </li>
+    <li>
+      Preventative maintenance and oil changes
+    </li>
+    <li>
+      Tire rotation
+    </li>
+    <li>
+      Fleet maintenance plans and reporting
+    </li>
+  </ul>
+  <p>
+     We focus on minimizing downtime and maximizing performance, so whether you're bringing in your daily driver or an entire work fleet, you'll receive honest service and high-quality results every time. 
+  </p>
+</div>
+`;

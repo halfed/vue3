@@ -9,6 +9,7 @@
     "server": "ts-node src/server/index.ts"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "@types/body-parser": "1.19",
     "@types/cookie-parser": "^1.4.0",
     "@types/cors": "2.8",

@@ -5,10 +5,7 @@ import cors from "cors"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import jsonwebtoken from "jsonwebtoken"
-//const con = require('./db_connection')
 import pool from './db_connection';
-
-//import connection from "./demo_db_connection"
 import { today, thisWeek, thisMonth, type Post } from "../posts"
 import type { NewUser, User } from "../users"
 
@@ -129,6 +126,8 @@ const authenticateToken = (req, res, next) => {
     }
 }
 
+////// ----- GETS
+
 app.get('/summit-users', authenticateToken, async (req, res) => {
     // Now, this route handler can assume the user is authenticated.
     // The authentication logic has been abstracted into the middleware.
@@ -168,13 +167,36 @@ app.get('/work-ticket/:id', authenticateToken, async (req, res) => {
     }
 });
 
+app.get('/property_tickets/:id', authenticateToken, async (req, res) => {
+    // Now, this route handler can assume the user is authenticated.
+    // The authentication logic has been abstracted into the middleware.
+    // Other routes can also reuse the 'authenticateUser' middleware.
+    connection = await pool.getConnection();
+    const { id } = req.params;
+    try {
+        const [results] = await connection.execute('SELECT id, type, completion_time, payout, schedule,' +
+            'status, access FROM work_ticket where property_id = ' + id);
+        if (results.length === 0) {
+            res.status(404).send('Properties not found.');
+            return [];
+        } else {
+            res.status(200).json(results);
+        }
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).json({ message: 'Error fetching users' });
+    } finally {
+        if (connection) connection.release(); // Release the connection back to the pool
+    }
+});
+
 app.get('/work-properties', authenticateToken, async (req, res) => {
     // Now, this route handler can assume the user is authenticated.
     // The authentication logic has been abstracted into the middleware.
     // Other routes can also reuse the 'authenticateUser' middleware.
     connection = await pool.getConnection();
     try {
-        const [results] = await connection.execute('SELECT id, name, address, type FROM properties');
+        const [results] = await connection.execute('SELECT id, name, address, type, property_status FROM properties');
         res.status(200).json(results);
     } catch (err) {
         console.error('Error fetching users:', err);
@@ -184,6 +206,23 @@ app.get('/work-properties', authenticateToken, async (req, res) => {
     }
 });
 
+app.get('/named-properties', authenticateToken, async (req, res) => {
+    connection = await pool.getConnection();
+
+    try {
+        const [results] = await connection.execute(
+            'SELECT id, name, property_status FROM properties ORDER BY name ASC'
+        );
+        res.status(200).json(results);
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).json({ message: 'Error fetching users' });
+    } finally {
+        if (connection) connection.release(); // Release the connection back to the pool
+    }
+});
+
+/// WHY DO i HAVE THIS
 // app.get('/work-tasks', authenticateToken, (req, res) => {
 //     // Now, this route handler can assume the user is authenticated.
 //     // The authentication logic has been abstracted into the middleware.
@@ -191,6 +230,35 @@ app.get('/work-properties', authenticateToken, async (req, res) => {
 
 //     con.query('SELECT * from work_tasks where id ')
 // })
+
+////// ----- POSTS
+
+app.post('/add-property', authenticateToken, async (req, res) => {
+    // ADD VALIDATION(SANATIZE DATA)
+    // ADD EXCEPTIONS IF NOT ALL REQUIRED DATA
+    connection = await pool.getConnection();
+
+    const { name, address, type, propertyStatus } = req.body;
+    const sql = 'INSERT INTO properties (name, address, type, property_status) VALUES (?, ?, ?, ?)';
+    const values = [name, address, type, propertyStatus];
+
+    try {
+        const [result] = await connection.query(sql, values);
+        if (result.affectedRows) {
+            return res.status(201).send('Data inserted successfully');
+        } else {
+            return res.status(500).json({ message: "Data insertion failed due to an invalid request" });
+        }
+    } catch (err: any) {
+        console.error('Error inserting data: ' + err.stack);
+        return res.status(500).send('Data insertion failed due to an invalid request');
+    } finally {
+        if (connection) connection.release(); // Release the connection back to the pool
+
+    }
+    
+
+});
 
 process.on('SIGINT', async () => {
   console.log('Received SIGINT. Shutting down gracefully...');

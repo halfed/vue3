@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 import Navbar from "./components/Navbar.vue";
+import Navbar2 from "./components/Navbar2.vue";
 import { useModal } from "./composables/modal";
 import { useUsers } from "./stores/users";
 
@@ -43,6 +44,7 @@ usersStore.authenticate();
     <div class="container">
       <div class="business-title">MTEK LTD.</div>
       <Navbar />
+      <Navbar2 />
       <RouterView />
     </div>
   </div>

@@ -3,7 +3,7 @@ import { inject } from 'vue'
 import { onMounted, ref } from 'vue';
 import { Properties } from '../properties';
 import { useCookie } from 'vue-cookie-next'
-import { propertiesStore } from '../stores/properties';
+import { usePropertiesStore } from '../stores/properties';
 
 const axios: any = inject('axios')  // inject axios
 
@@ -13,32 +13,36 @@ const token = cookie.getCookie('summit-property-jwt');
 
 const properties = ref<Properties[]>([]);
 
-const property = propertiesStore();
+const property = usePropertiesStore();
 
 const search = ref();
 const headers = ref<any[]>([
   { title: 'Property', align: 'start', key: 'name' },
     {title: 'Address', key: 'address'},
-    { title: 'Type', key: 'type' },
-    { title: 'ID', key: 'id'},
+  { title: 'Type', key: 'type' },
+  {title: 'Property Status', key: 'property_status'},
+  { title: 'ID', key: 'id' },
+    
 ],)
 
   
 
-const getProperties = async () => {
-      axios
+const getProperties = () => {
+    axios
         .get("/api/work-properties", {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
-        .then((response: { data: any }) => {
+      .then((response: { data: any }) => {
           property.setProperties(response.data);
           properties.value = response.data;
-        });
+        }).catch(error => {
+        console.error('Error fetching data:', error);
+      });;
 };
 
-onMounted(async () => {
+onMounted(() => {
     getProperties();
   });
 </script>
@@ -46,6 +50,9 @@ onMounted(async () => {
 <template>
     <v-card title="PROPERTIES" flat>
         <template v-slot:text>
+        <div class="property-button">
+          <v-btn to="/maintenance/add-property">Add A Property</v-btn>
+        </div>
             <v-text-field
                 v-model="search"
                 label="Search"
@@ -54,6 +61,7 @@ onMounted(async () => {
                 hide-details
                 single-line
             ></v-text-field>
+            
         </template>
 
         <v-data-table
@@ -67,3 +75,11 @@ onMounted(async () => {
         </v-data-table>
     </v-card>
 </template>
+
+<style lang="scss">
+  .property-button {
+    float: right;
+    padding-left: 20px;
+    margin-top: 10px;
+  }
+</style>

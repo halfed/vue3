@@ -3,4 +3,5 @@ export interface Properties {
     name: string
     address: string
     type: string
+    propertyStatus: string
 }
