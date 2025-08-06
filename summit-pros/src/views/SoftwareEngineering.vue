@@ -1,5 +1,35 @@
 <template>
-    <div>
-        <h1>Custom Software Engineering</h1>
+    <div class="flat-page">
+        <div>
+            <img class="page-image" src="../assets/software-engineering.jpg"/>
+        </div>
+        <h1>Automotive Repair & Diagnostics</h1>
+        <p>
+            Our software engineering team partners with startups, SMBs, and enterprise clients 
+            to design, build, and maintain robust digital solutions. We specialize in practical, 
+            scalable development that supports real business operations not just code for 
+            the sake of it.
+        </p>
+        <h2>Capabilities include:</h2>
+        <ul>
+            <li>Full-stack web and mobile application development</li>
+            <li>Internal business tools and automation systems</li>
+            <li>API integration and custom dashboards</li>
+            <li>Cloud infrastructure consulting (AWS, Azure, GCP)</li>
+            <li>Agile project management and DevOps support</li>
+            <li>Ongoing maintenance, updates, and scalability planning</li>
+        </ul>
+        <p>
+        Whether you need to streamline your business operations, build a customer-facing app, 
+        or replace outdated systems, MTEK delivers secure, scalable software tailored to your 
+        exact needs on time and on budget.
+        </p>
     </div>
 </template>
+
+<style lang="scss">
+    .page-image {
+        width: 86%;
+        height: 511px;
+    }
+</style>
