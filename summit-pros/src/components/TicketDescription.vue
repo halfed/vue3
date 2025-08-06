@@ -3,7 +3,7 @@ import { onMounted, ref, reactive } from 'vue';
 import { useCookie } from 'vue-cookie-next'
 import { inject } from 'vue'
 import { useRoute } from 'vue-router'
-import { propertiesStore } from '../stores/properties'
+import { usePropertiesStore } from '../stores/properties'
 
 const route = useRoute()
 const axios: any = inject('axios')  // inject axios
@@ -12,14 +12,14 @@ const cookie = useCookie();
 const token = cookie.getCookie('summit-property-jwt');
 const workItemNumber = ref();
 const workItems = ref([]);
-const propertyStore = propertiesStore();
+const propertyStore = usePropertiesStore();
 const queryParam: any = Number(route.params.id);
 const theProperty = propertyStore.getFilteredProperty(queryParam)
 const individualProperty = theProperty.get(queryParam)
 
 const getList = async () => {
   
-      axios
+      await axios
         .get(`/api/work-ticket/${queryParam}`, {
           headers: {
             Authorization: `Bearer ${token}`

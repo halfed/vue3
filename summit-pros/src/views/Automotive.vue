@@ -1,0 +1,25 @@
+<template>
+    <div>
+        <h1>Automotive Repair & Diagnostics</h1>
+        <p>
+            Our automotive division offers expert service for individual car owners, 
+            commercial fleets, and small businesses that rely on vehicle uptime. 
+            With ASE-certified technicians and a transparent, customer-first approach, 
+            we provide accurate diagnostics and reliable repairs quickly and affordably.
+        </p>
+        <h2>Services Include:</h2>
+        <ul>
+            <li>Engine and transmission diagnostics</li>
+            <li>Brake service and suspension repair</li>
+            <li>Battery replacement and charging systems</li>
+            <li>Preventative maintenance and oil changes</li>
+            <li>Tire rotation</li>
+            <li>Fleet maintenance plans and reporting</li>
+        </ul>
+        <p>
+        We focus on minimizing downtime and maximizing performance, 
+        so whether you're bringing in your daily driver or an entire work 
+        fleet, you'll receive honest service and high-quality results every time.
+        </p>
+    </div>
+</template>

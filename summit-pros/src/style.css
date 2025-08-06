@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Verdana, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -24,12 +24,13 @@ a:hover {
 
 body {
   margin: 0;
-  background: #191919;
+  background: #282627;
   background: linear-gradient(0deg,rgba(25, 25, 25, 1) 0%, rgba(66, 66, 66, 1) 100%);
   /* display: flex;
   place-items: center; */
   /* min-width: 320px;
   min-height: 100vh; */
+  font-family: Tahoma , Verdana, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .business-title {
@@ -42,6 +43,14 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+.main-title {
+    font-weight: 600;
+}
+
+.nav-links {
+    font-size: 15px;
 }
 
 /* button {
@@ -101,4 +110,16 @@ thead > tr > th.v-data-table__th--sortable:hover,
 .v-data-table .v-table__wrapper > table tbody > tr > 
 th.v-data-table__th--sortable:hover {
   color: #FFFFFF;
+}
+
+.flat-page {
+  background-color: #FFF;
+  color: #1A1A1A;
+  text-align: center;
+  padding: 20px 40px 50px 40px;
+}
+
+.bg-nav-primary {
+  background-color: #404040;
+  color: #FFF;
 }

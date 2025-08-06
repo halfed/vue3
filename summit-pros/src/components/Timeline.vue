@@ -7,10 +7,10 @@ const postsStore = usePosts();
 
 
 await postsStore.fetchPosts();
+
 </script>
 
 <template>
-
 	<nav class="is-primary panel">
 		<span class="panel-tabs timeline">
 			<a 
