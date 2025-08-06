@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div class="flat-page">
+        <div>
+            <img class="page-image" src="../assets/automotive-repair.jpg"/>
+        </div>
         <h1>Automotive Repair & Diagnostics</h1>
         <p>
             Our automotive division offers expert service for individual car owners, 
@@ -23,3 +26,10 @@
         </p>
     </div>
 </template>
+
+<style lang="scss">
+    .page-image {
+        width: 86%;
+        height: 511px;
+    }
+</style>
